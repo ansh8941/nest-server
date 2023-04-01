@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator nestgraphql {
+  provider                   = "node node_modules/prisma-nestjs-graphql"
+  output                     = "../src/common/@generated"
+  types_DateTime_fieldType   = "Date | string"
+  types_DateTime_graphqlType = "Date"
+}
+
+model User {
+  id                        String   @id @default(cuid())
+  email                     String   @unique
+  password                  String
+  role                      Role     @default(USER)
+  createdAt                 DateTime @default(now())
+  updatedAt                 DateTime @updatedAt
+  profile                   Profile?
+  currentHashedRefreshToken String?
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+model Profile {
+  id        String   @id @default(cuid())
+  username  String   @unique
+  firstName String?
+  lastName  String?
+  bio       String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  userId    String?  @unique
+  user      User?    @relation(fields: [userId], references: [id])
+}

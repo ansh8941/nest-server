@@ -1,0 +1,355 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Auth {
+  """JWT access token"""
+  accessToken: JWT!
+
+  """JWT refresh token"""
+  refreshToken: JWT!
+}
+
+input ChangePasswordInput {
+  newPassword: String!
+  oldPassword: String!
+  token: String!
+}
+
+input CreateProfileInput {
+  bio: String
+  firstName: String
+  lastName: String
+  username: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input DateTimeFieldUpdateOperationsInput {
+  set: DateTime
+}
+
+input DateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input EnumRoleFilter {
+  equals: Role
+  in: [Role!]
+  not: NestedEnumRoleFilter
+  notIn: [Role!]
+}
+
+"""
+A field whose value is a JSON Web Token (JWT): https://jwt.io/introduction.
+"""
+scalar JWT
+
+input LoginUserInput {
+  email: String!
+  password: String!
+}
+
+type Mutation {
+  adminCreateOneUser(data: UserCreateInput!): user!
+  adminDeleteOneUser(where: UserWhereUniqueInput!): user!
+  adminUpsertOneUser(data: UserCreateInput!): user!
+  changePassword(data: ChangePasswordInput!): user!
+  createProfile(data: CreateProfileInput!): profile!
+  deleteAccount: user!
+  login(data: LoginUserInput!): Auth!
+  updateAccount(data: UpdateUserInput!): user!
+  updateProfile(data: UpdateProfileInput!, where: ProfileWhereUniqueInput!): profile!
+}
+
+input NestedDateTimeFilter {
+  equals: DateTime
+  gt: DateTime
+  gte: DateTime
+  in: [DateTime!]
+  lt: DateTime
+  lte: DateTime
+  not: NestedDateTimeFilter
+  notIn: [DateTime!]
+}
+
+input NestedEnumRoleFilter {
+  equals: Role
+  in: [Role!]
+  not: NestedEnumRoleFilter
+  notIn: [Role!]
+}
+
+input NestedStringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NestedStringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input NullableStringFieldUpdateOperationsInput {
+  set: String
+}
+
+input ProfileCreateNestedOneWithoutUserInput {
+  connect: ProfileWhereUniqueInput
+  connectOrCreate: ProfileCreateOrConnectWithoutUserInput
+  create: ProfileCreateWithoutUserInput
+}
+
+input ProfileCreateOrConnectWithoutUserInput {
+  create: ProfileCreateWithoutUserInput!
+  where: ProfileWhereUniqueInput!
+}
+
+input ProfileCreateWithoutUserInput {
+  bio: String
+  createdAt: DateTime
+  firstName: String
+  id: String
+  lastName: String
+  updatedAt: DateTime
+  username: String!
+}
+
+input ProfileOrderByWithRelationInput {
+  bio: SortOrder
+  createdAt: SortOrder
+  firstName: SortOrder
+  id: SortOrder
+  lastName: SortOrder
+  updatedAt: SortOrder
+  user: UserOrderByWithRelationInput
+  userId: SortOrder
+  username: SortOrder
+}
+
+input ProfileRelationFilter {
+  is: ProfileWhereInput
+  isNot: ProfileWhereInput
+}
+
+input ProfileUpdateOneWithoutUserNestedInput {
+  connect: ProfileWhereUniqueInput
+  connectOrCreate: ProfileCreateOrConnectWithoutUserInput
+  create: ProfileCreateWithoutUserInput
+  delete: Boolean
+  disconnect: Boolean
+  update: ProfileUpdateWithoutUserInput
+  upsert: ProfileUpsertWithoutUserInput
+}
+
+input ProfileUpdateWithoutUserInput {
+  bio: NullableStringFieldUpdateOperationsInput
+  createdAt: DateTimeFieldUpdateOperationsInput
+  firstName: NullableStringFieldUpdateOperationsInput
+  id: StringFieldUpdateOperationsInput
+  lastName: NullableStringFieldUpdateOperationsInput
+  updatedAt: DateTimeFieldUpdateOperationsInput
+  username: StringFieldUpdateOperationsInput
+}
+
+input ProfileUpsertWithoutUserInput {
+  create: ProfileCreateWithoutUserInput!
+  update: ProfileUpdateWithoutUserInput!
+}
+
+input ProfileWhereInput {
+  AND: [ProfileWhereInput!]
+  NOT: [ProfileWhereInput!]
+  OR: [ProfileWhereInput!]
+  bio: StringNullableFilter
+  createdAt: DateTimeFilter
+  firstName: StringNullableFilter
+  id: StringFilter
+  lastName: StringNullableFilter
+  updatedAt: DateTimeFilter
+  user: UserRelationFilter
+  userId: StringNullableFilter
+  username: StringFilter
+}
+
+input ProfileWhereUniqueInput {
+  id: String
+  userId: String
+  username: String
+}
+
+type Query {
+  adminCountManyUsers(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): Int!
+  adminFindFirstUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): user!
+  adminFindManyUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [user!]!
+  adminFindUniqueUser(where: UserWhereUniqueInput!): user!
+  me: user!
+  profile(where: UserWhereUniqueInput!): profile!
+  profileCurrentUser: profile!
+}
+
+enum QueryMode {
+  default
+  insensitive
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum SortOrder {
+  asc
+  desc
+}
+
+input StringFieldUpdateOperationsInput {
+  set: String
+}
+
+input StringFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input StringNullableFilter {
+  contains: String
+  endsWith: String
+  equals: String
+  gt: String
+  gte: String
+  in: [String!]
+  lt: String
+  lte: String
+  mode: QueryMode
+  not: NestedStringNullableFilter
+  notIn: [String!]
+  startsWith: String
+}
+
+input UpdateProfileInput {
+  bio: String
+  firstName: String
+  lastName: String
+  username: String
+}
+
+input UpdateUserInput {
+  currentHashedRefreshToken: String
+  email: String
+  password: String
+  profile: ProfileUpdateOneWithoutUserNestedInput
+}
+
+input UserCreateInput {
+  createdAt: DateTime
+  currentHashedRefreshToken: String
+  email: String!
+  id: String
+  password: String!
+  profile: ProfileCreateNestedOneWithoutUserInput
+  role: Role
+  updatedAt: DateTime
+}
+
+input UserOrderByWithRelationInput {
+  createdAt: SortOrder
+  currentHashedRefreshToken: SortOrder
+  email: SortOrder
+  id: SortOrder
+  password: SortOrder
+  profile: ProfileOrderByWithRelationInput
+  role: SortOrder
+  updatedAt: SortOrder
+}
+
+input UserRelationFilter {
+  is: UserWhereInput
+  isNot: UserWhereInput
+}
+
+enum UserScalarFieldEnum {
+  createdAt
+  currentHashedRefreshToken
+  email
+  id
+  password
+  role
+  updatedAt
+}
+
+input UserWhereInput {
+  AND: [UserWhereInput!]
+  NOT: [UserWhereInput!]
+  OR: [UserWhereInput!]
+  createdAt: DateTimeFilter
+  currentHashedRefreshToken: StringNullableFilter
+  email: StringFilter
+  id: StringFilter
+  password: StringFilter
+  profile: ProfileRelationFilter
+  role: EnumRoleFilter
+  updatedAt: DateTimeFilter
+}
+
+input UserWhereUniqueInput {
+  email: String
+  id: String
+}
+
+type profile {
+  bio: String
+  createdAt: DateTime!
+  firstName: String
+  id: ID!
+  lastName: String
+  updatedAt: DateTime!
+  user: user
+  username: String
+}
+
+type user {
+  createdAt: DateTime!
+  email: String!
+  id: ID!
+  role: String!
+  updatedAt: DateTime!
+}
