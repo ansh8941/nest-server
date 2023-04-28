@@ -1,15 +1,10 @@
-import { Args, Context, Mutation, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Resolver } from '@nestjs/graphql';
 import { Auth } from './models/auth.model';
-import { LoginUserInput, RegisterUserInput, ResetPasswordInput } from './dto';
+import { LoginUserInput, RegisterUserInput } from './dto';
 import { AuthService } from './services/auth.service';
-import { BadRequestException, UseGuards } from '@nestjs/common';
-import {
-  IPayloadUserJwt,
-  IRequestWithUser,
-  ISessionAuthToken,
-} from '@common/global-interfaces';
-import { ChangePasswordInput } from '@modules/user/dto';
-import { JwtGuard, JwtRefreshTokenGuard } from './guards';
+import { BadRequestException } from '@nestjs/common';
+import { IPayloadUserJwt, ISessionAuthToken } from '@common/global-interfaces';
+import { User } from '@modules/user/user.model';
 
 @Resolver(() => Auth)
 export class AuthResolver {
@@ -30,5 +25,20 @@ export class AuthResolver {
     const token: ISessionAuthToken =
       await this.authService.generateAuthTokenFromLogin(payload);
     return token;
+  }
+
+  /* Mutation*/
+  // authRegister
+  @Mutation(() => User)
+  public async register(@Args('data') data: RegisterUserInput) {
+    const user = await this.authService.register(data);
+    // --> Todo: Send verification
+    // If process.env === 'production'
+
+    // Test send welcome after registration
+    // if (user && process.env.NODE_ENV === 'development') {
+    //   await this.emailService.sendWelcome(user.email);
+    // }
+    return user;
   }
 }
