@@ -18,14 +18,16 @@ generator nestgraphql {
 }
 
 model User {
-  id                        String   @id @default(cuid())
-  email                     String   @unique
+  id                        String    @id @default(cuid())
+  email                     String    @unique
   password                  String
-  role                      Role     @default(USER)
-  createdAt                 DateTime @default(now())
-  updatedAt                 DateTime @updatedAt
+  role                      Role      @default(USER)
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
   profile                   Profile?
   currentHashedRefreshToken String?
+  posts                     Post[]
+  Comment                   Comment[]
 }
 
 enum Role {
@@ -43,4 +45,26 @@ model Profile {
   updatedAt DateTime @updatedAt
   userId    String?  @unique
   user      User?    @relation(fields: [userId], references: [id])
+}
+
+model Post {
+  id        String    @id @default(cuid())
+  title     String
+  content   String
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  authorId  String
+  author    User      @relation(fields: [authorId], references: [id])
+  comments  Comment[]
+}
+
+model Comment {
+  id        String   @id @default(cuid())
+  content   String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  postId    String
+  post      Post     @relation(fields: [postId], references: [id])
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
 }

@@ -9,6 +9,7 @@ import { UserModule } from '@modules/user/user.module';
 import { ProfileModule } from '@modules/profile/profile.module';
 import { graphqlModuleFactory } from '@common/configs/graphql-module.factory';
 import { AuthModule } from '@modules/auth/auth.module';
+import { PostModule } from './modules/post/post.module';
 
 @Global()
 @Module({
@@ -25,6 +26,7 @@ import { AuthModule } from '@modules/auth/auth.module';
     UserModule,
     AuthModule,
     ProfileModule,
+    PostModule,
   ],
   providers: [AppService],
   controllers: [AppController],

@@ -4,6 +4,8 @@ import { StringFieldUpdateOperationsInput } from '../prisma/string-field-update-
 import { EnumRoleFieldUpdateOperationsInput } from '../prisma/enum-role-field-update-operations.input';
 import { DateTimeFieldUpdateOperationsInput } from '../prisma/date-time-field-update-operations.input';
 import { NullableStringFieldUpdateOperationsInput } from '../prisma/nullable-string-field-update-operations.input';
+import { PostUncheckedUpdateManyWithoutAuthorNestedInput } from '../post/post-unchecked-update-many-without-author-nested.input';
+import { CommentUncheckedUpdateManyWithoutAuthorNestedInput } from '../comment/comment-unchecked-update-many-without-author-nested.input';
 
 @InputType()
 export class UserUncheckedUpdateWithoutProfileInput {
@@ -28,4 +30,10 @@ export class UserUncheckedUpdateWithoutProfileInput {
 
     @Field(() => NullableStringFieldUpdateOperationsInput, {nullable:true})
     currentHashedRefreshToken?: NullableStringFieldUpdateOperationsInput;
+
+    @Field(() => PostUncheckedUpdateManyWithoutAuthorNestedInput, {nullable:true})
+    posts?: PostUncheckedUpdateManyWithoutAuthorNestedInput;
+
+    @Field(() => CommentUncheckedUpdateManyWithoutAuthorNestedInput, {nullable:true})
+    Comment?: CommentUncheckedUpdateManyWithoutAuthorNestedInput;
 }

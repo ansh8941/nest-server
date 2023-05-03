@@ -16,6 +16,106 @@ input ChangePasswordInput {
   token: String!
 }
 
+input CommentCreateManyAuthorInput {
+  content: String!
+  createdAt: DateTime
+  id: String
+  postId: String!
+  updatedAt: DateTime
+}
+
+input CommentCreateManyAuthorInputEnvelope {
+  data: [CommentCreateManyAuthorInput!]!
+  skipDuplicates: Boolean
+}
+
+input CommentCreateManyPostInput {
+  authorId: String!
+  content: String!
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
+}
+
+input CommentCreateManyPostInputEnvelope {
+  data: [CommentCreateManyPostInput!]!
+  skipDuplicates: Boolean
+}
+
+input CommentCreateNestedManyWithoutAuthorInput {
+  connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutAuthorInput!]
+  create: [CommentCreateWithoutAuthorInput!]
+  createMany: CommentCreateManyAuthorInputEnvelope
+}
+
+input CommentCreateNestedManyWithoutPostInput {
+  connect: [CommentWhereUniqueInput!]
+  connectOrCreate: [CommentCreateOrConnectWithoutPostInput!]
+  create: [CommentCreateWithoutPostInput!]
+  createMany: CommentCreateManyPostInputEnvelope
+}
+
+input CommentCreateOrConnectWithoutAuthorInput {
+  create: CommentCreateWithoutAuthorInput!
+  where: CommentWhereUniqueInput!
+}
+
+input CommentCreateOrConnectWithoutPostInput {
+  create: CommentCreateWithoutPostInput!
+  where: CommentWhereUniqueInput!
+}
+
+input CommentCreateWithoutAuthorInput {
+  content: String!
+  createdAt: DateTime
+  id: String
+  post: PostCreateNestedOneWithoutCommentsInput!
+  updatedAt: DateTime
+}
+
+input CommentCreateWithoutPostInput {
+  author: UserCreateNestedOneWithoutCommentInput!
+  content: String!
+  createdAt: DateTime
+  id: String
+  updatedAt: DateTime
+}
+
+input CommentListRelationFilter {
+  every: CommentWhereInput
+  none: CommentWhereInput
+  some: CommentWhereInput
+}
+
+input CommentOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input CommentWhereInput {
+  AND: [CommentWhereInput!]
+  NOT: [CommentWhereInput!]
+  OR: [CommentWhereInput!]
+  author: UserRelationFilter
+  authorId: StringFilter
+  content: StringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  post: PostRelationFilter
+  postId: StringFilter
+  updatedAt: DateTimeFilter
+}
+
+input CommentWhereUniqueInput {
+  id: String
+}
+
+input CreatePostInput {
+  authorId: String!
+  content: String!
+  title: String!
+}
+
 input CreateProfileInput {
   bio: String
   firstName: String
@@ -65,9 +165,11 @@ type Mutation {
   adminDeleteOneUser(where: UserWhereUniqueInput!): user!
   adminUpsertOneUser(data: UserCreateInput!): user!
   changePassword(data: ChangePasswordInput!): user!
+  createPost(data: CreatePostInput!): Post!
   createProfile(data: CreateProfileInput!): profile!
   deleteAccount: user!
   login(data: LoginUserInput!): Auth!
+  register(data: RegisterUserInput!): user!
   updateAccount(data: UpdateUserInput!): user!
   updateProfile(data: UpdateProfileInput!, where: ProfileWhereUniqueInput!): profile!
 }
@@ -120,6 +222,102 @@ input NestedStringNullableFilter {
 
 input NullableStringFieldUpdateOperationsInput {
   set: String
+}
+
+type Post {
+  authorId: String!
+  content: String!
+  createdAt: DateTime!
+  id: String!
+  title: String!
+  updatedAt: DateTime!
+}
+
+input PostCreateManyAuthorInput {
+  content: String!
+  createdAt: DateTime
+  id: String
+  title: String!
+  updatedAt: DateTime
+}
+
+input PostCreateManyAuthorInputEnvelope {
+  data: [PostCreateManyAuthorInput!]!
+  skipDuplicates: Boolean
+}
+
+input PostCreateNestedManyWithoutAuthorInput {
+  connect: [PostWhereUniqueInput!]
+  connectOrCreate: [PostCreateOrConnectWithoutAuthorInput!]
+  create: [PostCreateWithoutAuthorInput!]
+  createMany: PostCreateManyAuthorInputEnvelope
+}
+
+input PostCreateNestedOneWithoutCommentsInput {
+  connect: PostWhereUniqueInput
+  connectOrCreate: PostCreateOrConnectWithoutCommentsInput
+  create: PostCreateWithoutCommentsInput
+}
+
+input PostCreateOrConnectWithoutAuthorInput {
+  create: PostCreateWithoutAuthorInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateOrConnectWithoutCommentsInput {
+  create: PostCreateWithoutCommentsInput!
+  where: PostWhereUniqueInput!
+}
+
+input PostCreateWithoutAuthorInput {
+  comments: CommentCreateNestedManyWithoutPostInput
+  content: String!
+  createdAt: DateTime
+  id: String
+  title: String!
+  updatedAt: DateTime
+}
+
+input PostCreateWithoutCommentsInput {
+  author: UserCreateNestedOneWithoutPostsInput!
+  content: String!
+  createdAt: DateTime
+  id: String
+  title: String!
+  updatedAt: DateTime
+}
+
+input PostListRelationFilter {
+  every: PostWhereInput
+  none: PostWhereInput
+  some: PostWhereInput
+}
+
+input PostOrderByRelationAggregateInput {
+  _count: SortOrder
+}
+
+input PostRelationFilter {
+  is: PostWhereInput
+  isNot: PostWhereInput
+}
+
+input PostWhereInput {
+  AND: [PostWhereInput!]
+  NOT: [PostWhereInput!]
+  OR: [PostWhereInput!]
+  author: UserRelationFilter
+  authorId: StringFilter
+  comments: CommentListRelationFilter
+  content: StringFilter
+  createdAt: DateTimeFilter
+  id: StringFilter
+  title: StringFilter
+  updatedAt: DateTimeFilter
+}
+
+input PostWhereUniqueInput {
+  id: String
 }
 
 input ProfileCreateNestedOneWithoutUserInput {
@@ -212,6 +410,7 @@ type Query {
   adminFindManyUser(cursor: UserWhereUniqueInput, distinct: [UserScalarFieldEnum!], orderBy: [UserOrderByWithRelationInput!], skip: Int, take: Int, where: UserWhereInput): [user!]!
   adminFindUniqueUser(where: UserWhereUniqueInput!): user!
   me: user!
+  posts: [Post!]!
   profile(where: UserWhereUniqueInput!): profile!
   profileCurrentUser: profile!
 }
@@ -219,6 +418,12 @@ type Query {
 enum QueryMode {
   default
   insensitive
+}
+
+input RegisterUserInput {
+  email: String!
+  password: String!
+  profile: ProfileCreateNestedOneWithoutUserInput
 }
 
 enum Role {
@@ -280,6 +485,54 @@ input UpdateUserInput {
 }
 
 input UserCreateInput {
+  Comment: CommentCreateNestedManyWithoutAuthorInput
+  createdAt: DateTime
+  currentHashedRefreshToken: String
+  email: String!
+  id: String
+  password: String!
+  posts: PostCreateNestedManyWithoutAuthorInput
+  profile: ProfileCreateNestedOneWithoutUserInput
+  role: Role
+  updatedAt: DateTime
+}
+
+input UserCreateNestedOneWithoutCommentInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutCommentInput
+  create: UserCreateWithoutCommentInput
+}
+
+input UserCreateNestedOneWithoutPostsInput {
+  connect: UserWhereUniqueInput
+  connectOrCreate: UserCreateOrConnectWithoutPostsInput
+  create: UserCreateWithoutPostsInput
+}
+
+input UserCreateOrConnectWithoutCommentInput {
+  create: UserCreateWithoutCommentInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateOrConnectWithoutPostsInput {
+  create: UserCreateWithoutPostsInput!
+  where: UserWhereUniqueInput!
+}
+
+input UserCreateWithoutCommentInput {
+  createdAt: DateTime
+  currentHashedRefreshToken: String
+  email: String!
+  id: String
+  password: String!
+  posts: PostCreateNestedManyWithoutAuthorInput
+  profile: ProfileCreateNestedOneWithoutUserInput
+  role: Role
+  updatedAt: DateTime
+}
+
+input UserCreateWithoutPostsInput {
+  Comment: CommentCreateNestedManyWithoutAuthorInput
   createdAt: DateTime
   currentHashedRefreshToken: String
   email: String!
@@ -291,11 +544,13 @@ input UserCreateInput {
 }
 
 input UserOrderByWithRelationInput {
+  Comment: CommentOrderByRelationAggregateInput
   createdAt: SortOrder
   currentHashedRefreshToken: SortOrder
   email: SortOrder
   id: SortOrder
   password: SortOrder
+  posts: PostOrderByRelationAggregateInput
   profile: ProfileOrderByWithRelationInput
   role: SortOrder
   updatedAt: SortOrder
@@ -318,6 +573,7 @@ enum UserScalarFieldEnum {
 
 input UserWhereInput {
   AND: [UserWhereInput!]
+  Comment: CommentListRelationFilter
   NOT: [UserWhereInput!]
   OR: [UserWhereInput!]
   createdAt: DateTimeFilter
@@ -325,6 +581,7 @@ input UserWhereInput {
   email: StringFilter
   id: StringFilter
   password: StringFilter
+  posts: PostListRelationFilter
   profile: ProfileRelationFilter
   role: EnumRoleFilter
   updatedAt: DateTimeFilter
