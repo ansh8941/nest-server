@@ -18,11 +18,11 @@ export class ProfileResolver {
   /* Query */
   @Query(() => Profile)
   public async profileCurrentUser(
-    @CurrentUser() user: User,
+    @CurrentUser() userId: string,
     @Info() info?: GraphQLResolveInfo,
   ) {
     const where: ProfileWhereUniqueInput = {
-      userId: user.id,
+      userId: userId,
     };
     return await this.profileService.getProfile(where, info);
   }
@@ -38,9 +38,9 @@ export class ProfileResolver {
   @Mutation(() => Profile)
   public async createProfile(
     @Args('data') input: CreateProfileInput,
-    @CurrentUser() user: User,
+    @CurrentUser() userId: string,
   ) {
-    return await this.profileService.createProfile({ input, user });
+    return await this.profileService.createProfile({ input, userId });
   }
 
   @Mutation(() => Profile)

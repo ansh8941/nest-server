@@ -19,12 +19,12 @@ export class UserResolver {
    */
   @Query(() => User)
   public async me(
-    @CurrentUser() user: User,
+    @CurrentUser() userId: string,
     @Info() info?: GraphQLResolveInfo,
   ) {
     // Re-find user from database for search the  related field too
     const where: UserWhereUniqueInput = {
-      id: user.id,
+      id: userId,
     };
     const userFound = await this.userService.getUserByUniqueInput(where, info);
     if (!userFound) {

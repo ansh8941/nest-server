@@ -19,7 +19,10 @@ export class PostService {
   }
 
   /* Mutations*/
-  public async createOnePost(data: CreatePostInput): Promise<Post> {
-    return this.prisma.post.create({ data });
+  public async createOnePost(
+    userId: string,
+    data: CreatePostInput,
+  ): Promise<Post> {
+    return this.prisma.post.create({ data: { authorId: userId, ...data } });
   }
 }

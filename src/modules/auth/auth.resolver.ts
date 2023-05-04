@@ -32,13 +32,6 @@ export class AuthResolver {
   @Mutation(() => User)
   public async register(@Args('data') data: RegisterUserInput) {
     const user = await this.authService.register(data);
-    // --> Todo: Send verification
-    // If process.env === 'production'
-
-    // Test send welcome after registration
-    // if (user && process.env.NODE_ENV === 'development') {
-    //   await this.emailService.sendWelcome(user.email);
-    // }
     return user;
   }
 }

@@ -6,10 +6,12 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
-import { IUserFromRequest } from '@common/global-interfaces';
+import { JwtService } from '@nestjs/jwt';
+import { UserWhereUniqueInput } from '@common/@generated/user/user-where-unique.input';
+import { UserService } from '../services/user.service';
 
 export const CurrentUser = createParamDecorator(
-  (data, context: ExecutionContext) => {
+  async (data, context: ExecutionContext) => {
     let request;
     switch (context.getType() as string) {
       case 'http':
@@ -30,28 +32,15 @@ export const CurrentUser = createParamDecorator(
         );
     }
 
-    const user = request?.user;
-    if (!user) {
+    const jwtService = new JwtService({ secret: process.env.JWT_PRIVATE_KEY });
+    const bearerToken = request.headers.authorization;
+    const token = bearerToken.split(' ')[1];
+    const decoded = await jwtService.verifyAsync(token);
+
+    const userId = decoded.userId;
+    if (!userId) {
       throw new UnauthorizedException('No user found for request');
     }
-    return user as IUserFromRequest;
-  },
-);
-
-export const GqlUser = createParamDecorator(
-  (data, context: ExecutionContext) => {
-    const user = GqlExecutionContext.create(context).getContext().req.user;
-    if (!user) throw new UnauthorizedException('No user found for request');
-    return user;
-  },
-);
-
-export const HttpUser = createParamDecorator(
-  (data, context: ExecutionContext) => {
-    const req = context.switchToHttp().getRequest();
-    if (!req.user) {
-      throw new UnauthorizedException('No user found for request');
-    }
-    return req.user as IUserFromRequest;
+    return userId;
   },
 );

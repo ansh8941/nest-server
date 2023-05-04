@@ -41,16 +41,16 @@ export class ProfileService {
 
   public async createProfile({
     input,
-    user,
+    userId,
   }: {
     input: CreateProfileInput;
-    user: User;
+    userId: string;
   }) {
     const data: Prisma.ProfileCreateInput = {
       ...input,
       user: {
         connect: {
-          id: user.id,
+          id: userId,
         },
       },
     };

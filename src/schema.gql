@@ -111,7 +111,6 @@ input CommentWhereUniqueInput {
 }
 
 input CreatePostInput {
-  authorId: String!
   content: String!
   title: String!
 }
